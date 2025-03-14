@@ -106,7 +106,7 @@ unsafe extern "C" {
 // created by our macro.
 core::arch::global_asm!(
     r#"
-.section .boot, "ax"
+.section .boot_vexide, "ax"
 .global _boot
 
 _boot:

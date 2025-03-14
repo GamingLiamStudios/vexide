@@ -59,17 +59,16 @@ SECTIONS {
      * at their start, which tells the OS that we are a valid program and configures some
      * miscellaneous startup behavior.
      */
-    .code_signature : {
-        KEEP(*(.code_signature))
-        . = __program_ram_start + __code_signature_length;
-    } > PROGRAM_RAM
 
     /*
      * Executable program instructions.
      */
     .text : {
+        KEEP(*(.code_signature))
+
         /* _boot routine (always runs first, must be at 0x03800020) */
-        *(.boot)
+        . = __program_ram_start + __code_signature_length;
+        *(.boot_vexide)
         /* Stage 2 patcher. */
         *(.overwriter)
         /* Rest of the program. */
@@ -87,7 +86,7 @@ SECTIONS {
         *(.data .data.*)
     } > PROGRAM_RAM
 
-    .bss : {
+    .bss : ALIGN(4) {
         __bss_start = .;
         *(.bss .bss.*)
         __bss_end = .;
